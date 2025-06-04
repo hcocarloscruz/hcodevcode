@@ -1,0 +1,50 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    name: Build and Test
+    steps:
+      - uses: actions/checkout@v3
+      - name: Instalando dependencias...
+        run: echo "Instalando dependencias..."
+
+  lint:
+    runs-on: ubuntu-latest
+    name: Lint
+    steps:
+      - uses: actions/checkout@v3
+      - name: Ejecutando análisis de estilo del código...
+        run: echo "Ejecutando análisis de estilo del código..."
+
+  security-scan:
+    runs-on: ubuntu-latest
+    name: Security Scan
+    steps:
+      - uses: actions/checkout@v3
+      - name: Ejecutando escaneo de seguridad...
+        run: echo "Ejecutando escaneo de seguridad..."
+
+  deploy-test:
+    needs: [build-and-test, lint, security-scan]
+    runs-on: ubuntu-latest
+    name: Deployment to Test
+    steps:
+      - uses: actions/checkout@v3
+      - name: Ejecución de script de despliegue a test/qa
+        run: echo "Ejecutando script de despliegue a test/qa..."
+
+  deploy-staging:
+    needs: deploy-test
+    runs-on: ubuntu-latest
+    name: Deployment to Staging
+    steps:
+      - uses: actions/checkout@v3
+      - name: Ejecución de script de despliegue a STAGING
+        run: echo "Ejecutando script de despliegue a STAGING..."
